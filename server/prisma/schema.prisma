@@ -14,6 +14,7 @@ model User {
   lastName  String?
   password  String
   roles     Json
+  unidades  Unidad[]
   updatedAt DateTime @updatedAt
   username  String   @unique
 }
@@ -63,5 +64,15 @@ model Product {
   itemPrice   Float?
   name        String?
   orders      Order[]
+  updatedAt   DateTime @updatedAt
+}
+
+model Unidad {
+  createdAt   DateTime @default(now())
+  description String?
+  id          String   @id @default(cuid())
+  name        String
+  owner       User?    @relation(fields: [ownerId], references: [id])
+  ownerId     String?
   updatedAt   DateTime @updatedAt
 }
