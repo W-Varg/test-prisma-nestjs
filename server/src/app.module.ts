@@ -6,6 +6,8 @@ import { OrderModule } from "./order/order.module";
 import { CustomerModule } from "./customer/customer.module";
 import { AddressModule } from "./address/address.module";
 import { ProductModule } from "./product/product.module";
+import { UnidadModule } from "./unidad/unidad.module";
+import { TaskModule } from "./task/task.module";
 import { ACLModule } from "./auth/acl.module";
 import { AuthModule } from "./auth/auth.module";
 import { HealthModule } from "./health/health.module";
@@ -24,6 +26,8 @@ import { GraphQLModule } from "@nestjs/graphql";
     CustomerModule,
     AddressModule,
     ProductModule,
+    UnidadModule,
+    TaskModule,
     ACLModule,
     AuthModule,
     HealthModule,

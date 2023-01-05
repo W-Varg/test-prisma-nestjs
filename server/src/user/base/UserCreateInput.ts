@@ -11,9 +11,12 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional, IsJSON } from "class-validator";
+import { IsString, IsOptional, IsJSON, ValidateNested } from "class-validator";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
+import { TaskWhereUniqueInput } from "../../task/base/TaskWhereUniqueInput";
+import { Type } from "class-transformer";
+import { UnidadCreateNestedManyWithoutUsersInput } from "./UnidadCreateNestedManyWithoutUsersInput";
 
 @InputType()
 class UserCreateInput {
@@ -53,6 +56,30 @@ class UserCreateInput {
   @IsJSON()
   @Field(() => GraphQLJSON)
   roles!: InputJsonValue;
+
+  @ApiProperty({
+    required: false,
+    type: () => TaskWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => TaskWhereUniqueInput)
+  @IsOptional()
+  @Field(() => TaskWhereUniqueInput, {
+    nullable: true,
+  })
+  tasks?: TaskWhereUniqueInput | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => UnidadCreateNestedManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => UnidadCreateNestedManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => UnidadCreateNestedManyWithoutUsersInput, {
+    nullable: true,
+  })
+  unidades?: UnidadCreateNestedManyWithoutUsersInput;
 
   @ApiProperty({
     required: true,

@@ -13,8 +13,10 @@ import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { Type } from "class-transformer";
-import { IsOptional } from "class-validator";
+import { IsOptional, ValidateNested } from "class-validator";
 import { StringFilter } from "../../util/StringFilter";
+import { TaskWhereUniqueInput } from "../../task/base/TaskWhereUniqueInput";
+import { UnidadListRelationFilter } from "../../unidad/base/UnidadListRelationFilter";
 
 @InputType()
 class UserWhereInput {
@@ -50,6 +52,30 @@ class UserWhereInput {
     nullable: true,
   })
   lastName?: StringNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => TaskWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => TaskWhereUniqueInput)
+  @IsOptional()
+  @Field(() => TaskWhereUniqueInput, {
+    nullable: true,
+  })
+  tasks?: TaskWhereUniqueInput;
+
+  @ApiProperty({
+    required: false,
+    type: () => UnidadListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => UnidadListRelationFilter)
+  @IsOptional()
+  @Field(() => UnidadListRelationFilter, {
+    nullable: true,
+  })
+  unidades?: UnidadListRelationFilter;
 
   @ApiProperty({
     required: false,

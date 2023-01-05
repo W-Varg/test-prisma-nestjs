@@ -25,10 +25,13 @@ import { DeleteUserArgs } from "./DeleteUserArgs";
 import { UserFindManyArgs } from "./UserFindManyArgs";
 import { UserFindUniqueArgs } from "./UserFindUniqueArgs";
 import { User } from "./User";
+import { UnidadFindManyArgs } from "../../unidad/base/UnidadFindManyArgs";
+import { Unidad } from "../../unidad/base/Unidad";
+import { Task } from "../../task/base/Task";
 import { UserService } from "../user.service";
 
 @graphql.Resolver(() => User)
-// @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
+@common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 export class UserResolverBase {
   constructor(
     protected readonly service: UserService,
@@ -54,13 +57,13 @@ export class UserResolverBase {
     };
   }
 
-  // @common.UseInterceptors(AclFilterResponseInterceptor)
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.Query(() => [User])
-  // @nestAccessControl.UseRoles({
-  //   resource: "User",
-  //   action: "read",
-  //   possession: "any",
-  // })
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "read",
+    possession: "any",
+  })
   async users(@graphql.Args() args: UserFindManyArgs): Promise<User[]> {
     return this.service.findMany(args);
   }
@@ -90,7 +93,15 @@ export class UserResolverBase {
   async createUser(@graphql.Args() args: CreateUserArgs): Promise<User> {
     return await this.service.create({
       ...args,
-      data: args.data,
+      data: {
+        ...args.data,
+
+        tasks: args.data.tasks
+          ? {
+              connect: args.data.tasks,
+            }
+          : undefined,
+      },
     });
   }
 
@@ -105,7 +116,15 @@ export class UserResolverBase {
     try {
       return await this.service.update({
         ...args,
-        data: args.data,
+        data: {
+          ...args.data,
+
+          tasks: args.data.tasks
+            ? {
+                connect: args.data.tasks,
+              }
+            : undefined,
+        },
       });
     } catch (error) {
       if (isRecordNotFoundError(error)) {
@@ -134,5 +153,41 @@ export class UserResolverBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => [Unidad])
+  @nestAccessControl.UseRoles({
+    resource: "Unidad",
+    action: "read",
+    possession: "any",
+  })
+  async unidades(
+    @graphql.Parent() parent: User,
+    @graphql.Args() args: UnidadFindManyArgs
+  ): Promise<Unidad[]> {
+    const results = await this.service.findUnidades(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results;
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => Task, { nullable: true })
+  @nestAccessControl.UseRoles({
+    resource: "Task",
+    action: "read",
+    possession: "any",
+  })
+  async tasks(@graphql.Parent() parent: User): Promise<Task | null> {
+    const result = await this.service.getTasks(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return result;
   }
 }

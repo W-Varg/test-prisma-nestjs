@@ -11,10 +11,18 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsString, IsOptional, IsJSON } from "class-validator";
+import {
+  IsDate,
+  IsString,
+  IsOptional,
+  IsJSON,
+  ValidateNested,
+} from "class-validator";
 import { Type } from "class-transformer";
 import { GraphQLJSON } from "graphql-type-json";
 import { JsonValue } from "type-fest";
+import { Task } from "../../task/base/Task";
+import { Unidad } from "../../unidad/base/Unidad";
 
 @ObjectType()
 class User {
@@ -62,6 +70,24 @@ class User {
   @IsJSON()
   @Field(() => GraphQLJSON)
   roles!: JsonValue;
+
+  @ApiProperty({
+    required: false,
+    type: () => Task,
+  })
+  @ValidateNested()
+  @Type(() => Task)
+  @IsOptional()
+  tasks?: Task | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => [Unidad],
+  })
+  @ValidateNested()
+  @Type(() => Unidad)
+  @IsOptional()
+  unidades?: Array<Unidad>;
 
   @ApiProperty({
     required: true,

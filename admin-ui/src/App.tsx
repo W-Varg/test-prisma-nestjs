@@ -25,6 +25,14 @@ import { ProductList } from "./product/ProductList";
 import { ProductCreate } from "./product/ProductCreate";
 import { ProductEdit } from "./product/ProductEdit";
 import { ProductShow } from "./product/ProductShow";
+import { UnidadList } from "./unidad/UnidadList";
+import { UnidadCreate } from "./unidad/UnidadCreate";
+import { UnidadEdit } from "./unidad/UnidadEdit";
+import { UnidadShow } from "./unidad/UnidadShow";
+import { TaskList } from "./task/TaskList";
+import { TaskCreate } from "./task/TaskCreate";
+import { TaskEdit } from "./task/TaskEdit";
+import { TaskShow } from "./task/TaskShow";
 import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
@@ -85,6 +93,20 @@ const App = (): React.ReactElement => {
           edit={ProductEdit}
           create={ProductCreate}
           show={ProductShow}
+        />
+        <Resource
+          name="Unidad"
+          list={UnidadList}
+          edit={UnidadEdit}
+          create={UnidadCreate}
+          show={UnidadShow}
+        />
+        <Resource
+          name="Task"
+          list={TaskList}
+          edit={TaskEdit}
+          create={TaskCreate}
+          show={TaskShow}
         />
       </Admin>
     </div>

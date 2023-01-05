@@ -14,6 +14,8 @@ model User {
   lastName  String?
   password  String
   roles     Json
+  tasks     Task?
+  unidades  Unidad[]
   updatedAt DateTime @updatedAt
   username  String   @unique
 }
@@ -64,4 +66,37 @@ model Product {
   name        String?
   orders      Order[]
   updatedAt   DateTime @updatedAt
+}
+
+model Unidad {
+  createdAt   DateTime  @default(now())
+  description String?
+  dueDate     DateTime?
+  id          String    @id @default(cuid())
+  name        String
+  owner       User?     @relation(fields: [ownerId], references: [id])
+  ownerId     String?
+  tasks       Task[]
+  updatedAt   DateTime  @updatedAt
+}
+
+model Task {
+  assignedTo   User?           @relation(fields: [assignedToId], references: [id])
+  assignedToId String?         @unique
+  createdAt    DateTime        @default(now())
+  estimation   Int?
+  id           String          @id @default(cuid())
+  project      Unidad?         @relation(fields: [projectId], references: [id])
+  projectId    String?
+  startDate    DateTime?
+  status       EnumTaskStatus?
+  title        String
+  updatedAt    DateTime        @updatedAt
+}
+
+enum EnumTaskStatus {
+  New
+  Pending
+  Ongoing
+  Done
 }

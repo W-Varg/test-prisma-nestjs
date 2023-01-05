@@ -11,9 +11,12 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional, IsJSON } from "class-validator";
+import { IsString, IsOptional, IsJSON, ValidateNested } from "class-validator";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
+import { TaskWhereUniqueInput } from "../../task/base/TaskWhereUniqueInput";
+import { Type } from "class-transformer";
+import { UnidadUpdateManyWithoutUsersInput } from "./UnidadUpdateManyWithoutUsersInput";
 
 @InputType()
 class UserUpdateInput {
@@ -59,6 +62,30 @@ class UserUpdateInput {
     nullable: true,
   })
   roles?: InputJsonValue;
+
+  @ApiProperty({
+    required: false,
+    type: () => TaskWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => TaskWhereUniqueInput)
+  @IsOptional()
+  @Field(() => TaskWhereUniqueInput, {
+    nullable: true,
+  })
+  tasks?: TaskWhereUniqueInput | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => UnidadUpdateManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => UnidadUpdateManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => UnidadUpdateManyWithoutUsersInput, {
+    nullable: true,
+  })
+  unidades?: UnidadUpdateManyWithoutUsersInput;
 
   @ApiProperty({
     required: false,
