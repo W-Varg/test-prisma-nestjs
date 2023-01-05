@@ -174,17 +174,20 @@ type Mutation {
   createCustomer(data: CustomerCreateInput!): Customer!
   createOrder(data: OrderCreateInput!): Order!
   createProduct(data: ProductCreateInput!): Product!
+  createUnidad(data: UnidadCreateInput!): Unidad!
   createUser(data: UserCreateInput!): User!
   deleteAddress(where: AddressWhereUniqueInput!): Address!
   deleteCustomer(where: CustomerWhereUniqueInput!): Customer!
   deleteOrder(where: OrderWhereUniqueInput!): Order!
   deleteProduct(where: ProductWhereUniqueInput!): Product!
+  deleteUnidad(where: UnidadWhereUniqueInput!): Unidad!
   deleteUser(where: UserWhereUniqueInput!): User!
   login(credentials: Credentials!): UserInfo!
   updateAddress(data: AddressUpdateInput!, where: AddressWhereUniqueInput!): Address!
   updateCustomer(data: CustomerUpdateInput!, where: CustomerWhereUniqueInput!): Customer!
   updateOrder(data: OrderUpdateInput!, where: OrderWhereUniqueInput!): Order!
   updateProduct(data: ProductUpdateInput!, where: ProductWhereUniqueInput!): Product!
+  updateUnidad(data: UnidadUpdateInput!, where: UnidadWhereUniqueInput!): Unidad!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User!
 }
 
@@ -315,6 +318,7 @@ type Query {
   _customersMeta(orderBy: [CustomerOrderByInput!], skip: Float, take: Float, where: CustomerWhereInput): MetaQueryPayload!
   _ordersMeta(orderBy: [OrderOrderByInput!], skip: Float, take: Float, where: OrderWhereInput): MetaQueryPayload!
   _productsMeta(orderBy: [ProductOrderByInput!], skip: Float, take: Float, where: ProductWhereInput): MetaQueryPayload!
+  _unidadsMeta(orderBy: [UnidadOrderByInput!], skip: Float, take: Float, where: UnidadWhereInput): MetaQueryPayload!
   _usersMeta(orderBy: [UserOrderByInput!], skip: Float, take: Float, where: UserWhereInput): MetaQueryPayload!
   address(where: AddressWhereUniqueInput!): Address
   addresses(orderBy: [AddressOrderByInput!], skip: Float, take: Float, where: AddressWhereInput): [Address!]!
@@ -324,6 +328,8 @@ type Query {
   orders(orderBy: [OrderOrderByInput!], skip: Float, take: Float, where: OrderWhereInput): [Order!]!
   product(where: ProductWhereUniqueInput!): Product
   products(orderBy: [ProductOrderByInput!], skip: Float, take: Float, where: ProductWhereInput): [Product!]!
+  unidad(where: UnidadWhereUniqueInput!): Unidad
+  unidads(orderBy: [UnidadOrderByInput!], skip: Float, take: Float, where: UnidadWhereInput): [Unidad!]!
   user(where: UserWhereUniqueInput!): User
   userInfo: UserInfo!
   users(orderBy: [UserOrderByInput!], skip: Float, take: Float, where: UserWhereInput): [User!]!
@@ -369,12 +375,70 @@ input StringNullableFilter {
   startsWith: String
 }
 
+type Unidad {
+  createdAt: DateTime!
+  description: String
+  id: String!
+  name: String!
+  owner: User
+  updatedAt: DateTime!
+}
+
+input UnidadCreateInput {
+  description: String
+  name: String!
+  owner: UserWhereUniqueInput
+}
+
+input UnidadCreateNestedManyWithoutUsersInput {
+  connect: [UnidadWhereUniqueInput!]
+}
+
+input UnidadListRelationFilter {
+  every: UnidadWhereInput
+  none: UnidadWhereInput
+  some: UnidadWhereInput
+}
+
+input UnidadOrderByInput {
+  createdAt: SortOrder
+  description: SortOrder
+  id: SortOrder
+  name: SortOrder
+  ownerId: SortOrder
+  updatedAt: SortOrder
+}
+
+input UnidadUpdateInput {
+  description: String
+  name: String
+  owner: UserWhereUniqueInput
+}
+
+input UnidadUpdateManyWithoutUsersInput {
+  connect: [UnidadWhereUniqueInput!]
+  disconnect: [UnidadWhereUniqueInput!]
+  set: [UnidadWhereUniqueInput!]
+}
+
+input UnidadWhereInput {
+  description: StringNullableFilter
+  id: StringFilter
+  name: StringFilter
+  owner: UserWhereUniqueInput
+}
+
+input UnidadWhereUniqueInput {
+  id: String!
+}
+
 type User {
   createdAt: DateTime!
   firstName: String
   id: String!
   lastName: String
   roles: JSON!
+  unidades(orderBy: [UnidadOrderByInput!], skip: Float, take: Float, where: UnidadWhereInput): [Unidad!]!
   updatedAt: DateTime!
   username: String!
 }
@@ -384,6 +448,7 @@ input UserCreateInput {
   lastName: String
   password: String!
   roles: JSON!
+  unidades: UnidadCreateNestedManyWithoutUsersInput
   username: String!
 }
 
@@ -410,6 +475,7 @@ input UserUpdateInput {
   lastName: String
   password: String
   roles: JSON
+  unidades: UnidadUpdateManyWithoutUsersInput
   username: String
 }
 
@@ -417,6 +483,7 @@ input UserWhereInput {
   firstName: StringNullableFilter
   id: StringFilter
   lastName: StringNullableFilter
+  unidades: UnidadListRelationFilter
   username: StringFilter
 }
 
