@@ -25,6 +25,10 @@ import { ProductList } from "./product/ProductList";
 import { ProductCreate } from "./product/ProductCreate";
 import { ProductEdit } from "./product/ProductEdit";
 import { ProductShow } from "./product/ProductShow";
+import { UnidadList } from "./unidad/UnidadList";
+import { UnidadCreate } from "./unidad/UnidadCreate";
+import { UnidadEdit } from "./unidad/UnidadEdit";
+import { UnidadShow } from "./unidad/UnidadShow";
 import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
@@ -85,6 +89,13 @@ const App = (): React.ReactElement => {
           edit={ProductEdit}
           create={ProductCreate}
           show={ProductShow}
+        />
+        <Resource
+          name="Unidad"
+          list={UnidadList}
+          edit={UnidadEdit}
+          create={UnidadCreate}
+          show={UnidadShow}
         />
       </Admin>
     </div>
