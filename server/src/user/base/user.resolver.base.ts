@@ -28,7 +28,7 @@ import { User } from "./User";
 import { UserService } from "../user.service";
 
 @graphql.Resolver(() => User)
-@common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
+// @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 export class UserResolverBase {
   constructor(
     protected readonly service: UserService,
@@ -54,13 +54,13 @@ export class UserResolverBase {
     };
   }
 
-  @common.UseInterceptors(AclFilterResponseInterceptor)
+  // @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.Query(() => [User])
-  @nestAccessControl.UseRoles({
-    resource: "User",
-    action: "read",
-    possession: "any",
-  })
+  // @nestAccessControl.UseRoles({
+  //   resource: "User",
+  //   action: "read",
+  //   possession: "any",
+  // })
   async users(@graphql.Args() args: UserFindManyArgs): Promise<User[]> {
     return this.service.findMany(args);
   }
